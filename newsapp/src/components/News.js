@@ -1,8 +1,20 @@
 import React, { Component } from 'react';
 import NewsItem from './NewsItem';
 import Spinner from './Spinner';
+import PropTypes from 'prop-types'
+
 
 export default class News extends Component {
+  static defaultProps={
+    country:"in",
+    pageSize:8,
+    category:"general"
+  }
+  static propTypes={
+    country:PropTypes.string,
+    pageSize:PropTypes.number,
+    category:PropTypes.string,
+  }
   constructor() {
     super();
     this.state = {
@@ -14,7 +26,7 @@ export default class News extends Component {
   }
 
   async componentDidMount() {
-    let url = `https://newsapi.org/v2/everything?q=bitcoin&apiKey=da00831589a24119a7596f8e9fc9e1cc&page=1&pageSize=${this.props.pageSize}`;
+    let url = `https://newsapi.org/v2/top-headlines?country=us&category=${this.props.category}&apiKey=da00831589a24119a7596f8e9fc9e1cc&page=1&pageSize=${this.props.pageSize}`;
     this.setState({loading:true})
     let data = await fetch(url);
     let parsedData = await data.json();
@@ -26,7 +38,7 @@ export default class News extends Component {
   }
 
   handlePrevClick = async () => {
-    let url = `https://newsapi.org/v2/everything?q=bitcoin&apiKey=da00831589a24119a7596f8e9fc9e1cc&page=${this.state.page - 1}&pageSize=${this.props.pageSize}`;
+    let url = `https://newsapi.org/v2/top-headlines?country=us&category=${this.props.category}&apiKey=da00831589a24119a7596f8e9fc9e1cc&page=${this.state.page - 1}&pageSize=${this.props.pageSize}`;
     this.setState({loading:true})
     let data = await fetch(url);
     let parsedData = await data.json();
@@ -40,7 +52,7 @@ export default class News extends Component {
 
   handleNextClick = async () => {
     if (!(this.state.page + 1 > Math.ceil(this.state.totalResults / this.props.pageSize))) {
-      let url = `https://newsapi.org/v2/everything?q=bitcoin&apiKey=da00831589a24119a7596f8e9fc9e1cc&page=${this.state.page + 1}&pageSize=${this.props.pageSize}`;
+      let url = `https://newsapi.org/v2/top-headlines?country=us&category=${this.props.category}&apiKey=da00831589a24119a7596f8e9fc9e1cc&page=${this.state.page + 1}&pageSize=${this.props.pageSize}`;
       this.setState({loading:true})
       let data = await fetch(url);
       let parsedData = await data.json();
